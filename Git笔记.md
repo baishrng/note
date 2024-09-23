@@ -100,3 +100,15 @@ rm -rf .git
 | `git branch -d 分支名(已合并)`<br />`git branch -D 分支名(未合并)` | 删除分支                    |
 | `git branch -m 原分支名 目标分支名`                          | 修改分支名                  |
 
+
+
+## 远程
+
+配置教程 https://blog.csdn.net/Charles_Tian/article/details/80842439
+
+| 远程命令               | 解释                          |
+| ---------------------- | ----------------------------- |
+| `git push origin mian` | 将本地`main`分支上传到 github |
+|                        |                               |
+|                        |                               |
+
