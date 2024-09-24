@@ -106,9 +106,9 @@ rm -rf .git
 
 配置教程 https://blog.csdn.net/Charles_Tian/article/details/80842439
 
-| 远程命令               | 解释                          |
-| ---------------------- | ----------------------------- |
-| `git push origin mian` | 将本地`main`分支上传到 github |
-|                        |                               |
-|                        |                               |
+| 远程命令                              | 解释                          |
+| ------------------------------------- | ----------------------------- |
+| `git push origin mian`                | 将本地`main`分支上传到 github |
+| `git push --set-upstream origin main` |                               |
+|                                       |                               |
 
