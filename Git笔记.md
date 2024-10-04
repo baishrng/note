@@ -50,12 +50,26 @@ rm -rf .git
 - 在工作空间的根目录（项目的根目录）中创建一个名为`.gitignore`文件
 - 在`.gitignore`文件配置忽略过滤条件
 
-如下所示：
+常见的规则示例：
 
-```
-.idea
-target
-*.iml
+```python
+# 忽略所有 .log 文件
+*.log
+ 
+# 忽略特定文件 mysecretfile.txt
+mysecretfile.txt
+ 
+# 忽略整个目录
+node_modules/
+ 
+# 忽略所有 .pdf 文件，但跟踪特定的 mydoc.pdf
+*.pdf
+!mydoc.pdf
+ 
+# 忽略所有文件，但跟踪 .gitignore 和 foo.bar 文件
+*
+!.gitignore
+!foo.bar
 ```
 
 ---
