@@ -26,7 +26,7 @@
 | **transform**   | 用于对图像进行变换和处理的模块。它提供了多种功能，可以缩放、旋转、翻转和裁剪图像 |
 | **BufferProxy** | pygame 对象，通过数组协议导出表面缓冲区。允许你直接访问和修改图像或表面（surface）的像素数据，提供了更高效的方式来进行图像处理。 |
 | **freetype**    | 用于加载和渲染计算机字体的增强型 pygame 模块。与传统的 `pygame.font` 模块相比，`pygame.freetype` 提供了更灵活的功能和更好的性能，特别是在处理 TrueType 字体时。 |
-| **gfxdraw**     | 绘制形状的 pygame 模块                                       |
+| **gfxdraw**     | 绘制形状的 pygame 模块（实验性的）                           |
 | **midi**        | 用于与 midi 输入和输出交互的 pygame 模块。                   |
 | **PixelArray**  | 用于直接访问 surfaces 像素的 pygame 对象。可以高效地读取和修改图像的每个像素，适用于需要进行像素级处理的应用，例如图像编辑、特效制作等。 |
 | **pixelcopy**   | 用于复制像素数据的 pygame 模块。可以快速地将像素从一个表面（Surface）复制到另一个表面，或从图像文件加载像素数据。这对于需要进行图像处理和编辑的程序非常有用。 |
@@ -45,7 +45,7 @@
 
 pygame官方文档：https://www.pygame.org/docs/
 
-**sprite**、**transform**、**freetype**、**camera**、**examples**
+**freetype**、**camera**、**examples**
 
 **gfxdraw**、**scrap**
 
