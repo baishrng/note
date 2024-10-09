@@ -45,7 +45,7 @@
 
 pygame官方文档：https://www.pygame.org/docs/
 
-**mask**、**sprite**、**transform**、**freetype**、**camera**、**examples**
+**sprite**、**transform**、**freetype**、**camera**、**examples**
 
 **gfxdraw**、**scrap**
 
