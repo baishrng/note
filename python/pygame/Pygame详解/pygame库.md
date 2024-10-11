@@ -45,10 +45,6 @@
 
 pygame官方文档：https://www.pygame.org/docs/
 
-**freetype**、**camera**、**examples**
-
-**gfxdraw**、**scrap**
-
 ---
 
 ## pygame-menu

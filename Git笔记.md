@@ -147,3 +147,8 @@ node_modules/
 | `git push --set-upstream origin main` |                               |
 |                                       |                               |
 
+**问题：**
+
+（1）Please make sure you have the correct access rights and the repository exists.
+
+解决：把 github 上的 SSH Key 删除后重新创建
