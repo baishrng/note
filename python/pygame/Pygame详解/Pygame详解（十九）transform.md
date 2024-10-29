@@ -269,7 +269,7 @@ threshold(dest_surface, surface, search_color, threshold=(0,0,0,0), set_color=(0
 - **dest_surf (pygame.Surface pygame对象，用于表示图像或None)** -- 我们要修改的表面。请参见“set_behavior”。如果是计数（set_behavior为0），应为None。
 - **surf (pygame.Surface pygame对象，用于表示图像)** -- 我们要查看的表面。
 - **search_color (pygame.Color pygame对象，用于表示颜色)** -- 我们要搜索的颜色。
-- **threshold (pygame.Color pygame对象，用于表示颜色)** -- 从search_color（或search_surf）起的距离内。可以使用(r, g, b, a)的阈值，其中r、g、b可以有不同的阈值。例如，您可以使用r的阈值为40，而蓝色的阈值为2。
+- **threshold (pygame.Color pygame对象，用于表示颜色)** -- 颜色的阈值，指定与 `search_color` 多接近的颜色会被匹配。设置为 (50, 50, 50)，意味着颜色值在 search_color 附近50以内的都会被检测到
 - **set_color (pygame.Color pygame对象，用于表示颜色或None)** -- 我们在dest_surf中设置的颜色。
 - **set_behavior (int)** --
 
