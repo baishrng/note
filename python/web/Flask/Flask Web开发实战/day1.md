@@ -2,6 +2,22 @@
 学习Flask Web开发实战--第一天
 ---
 
+## 自定义 flask 命令
+
+```python
+@app.cli.command()
+def echo_info():
+    click.echo("flask 命令行测试")
+```
+
+然后在命令行中运行
+
+```
+flask echo_info
+```
+
+----
+
 ## flask routes
 
 使用 `flask routes` 命令可以查看程序中定义的所有路由。
