@@ -72,6 +72,26 @@ node_modules/
 !foo.bar
 ```
 
+如果你已经提交了某个文件，但后来决定将其添加到.gitignore文件中以忽略它，你需要执行一些额外的步骤来删除已提交的文件。
+
+首先，你应该从你的工作副本中删除该文件。你可以使用以下命令完成这个步骤：
+
+```
+git rm --cached 文件名
+```
+
+接下来，你需要提交.gitignore文件的更改和删除的文件。你可以使用以下命令将这些更改提交到版本控制库：
+
+```g
+git commit -m "更新.gitignore文件并删除文件"
+```
+
+若是文件夹
+
+```
+git rm -r --cached folder/
+```
+
 ---
 
 ## 添加和提交文件
@@ -152,3 +172,81 @@ node_modules/
 （1）Please make sure you have the correct access rights and the repository exists.
 
 解决：把 github 上的 SSH Key 删除后重新创建
+
+---
+
+## 标签
+
+#### **创建标签**
+
+**创建轻量标签**：
+
+```
+git tag v1.0.0
+```
+
+**创建附注标签**（推荐）：
+
+```
+git tag -a v1.0.0 -m "Release version 1.0.0"
+```
+
+#### **查看标签**
+
+**列出所有标签**：
+
+```
+git tag                        列出中本地的标签
+git tag -l "v.*"               -l 即 --list , 列出仓库中的标签基础上,支持更多选项和模式匹配
+```
+
+**查看标签详情**（仅附注标签）：
+
+```
+git show v1.0.0
+```
+
+**查看远程标签**
+
+```
+git ls-remote --tags origin
+```
+
+#### **推送标签到远程仓库**
+
+默认情况下，`git push` 不会推送标签，需显式推送：
+
+**推送单个标签**：
+
+```
+git push origin v1.0.0
+```
+
+**推送所有标签**：
+
+```
+git push origin --tags
+```
+
+#### **删除标签**
+
+**删除本地标签**：
+
+```
+git tag -d v1.0.0
+```
+
+**删除远程标签**：
+
+```
+git push origin :refs/tags/v1.0.0
+```
+
+#### **检出标签对应的代码**
+
+标签通常用于标记不可变的历史节点，若需要修改，建议基于标签创建分支：
+
+```
+git checkout -b release-v1.0.0 v1.0.0
+```
+
