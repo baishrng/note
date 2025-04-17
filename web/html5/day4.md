@@ -639,3 +639,193 @@ body {
 ```
 
 注意：**选择器类型相同则遵循层叠性**，否则按选择器**优先级**判断。
+
+### 优先级
+
+优先级：也叫权重，当一个标签使用了**多种**选择器时，基于不同种类的选择器的**匹配规则**。
+
+```html
+<style>
+    div {
+        color: red;
+    }
+
+    .box {
+        color: green;
+    }
+</style>
+<div class="box">div 标签</div>
+```
+
+规则：**选择器优先级高的样式生效。**
+
+公式：通配符选择器 < 标签选择器 < 类选择器 < id选择器 < 行内样式 < !important
+
+**（选中标签的范围越大，优先级越低）**
+
+示例：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* !important 提权功能，提高权重/优先级到 最高，慎用 */
+        div {
+            color: red !important;
+        }
+
+        * {
+            color: green;
+        }
+
+        .box {
+            color: blue;
+        }
+
+        #test {
+            color: orange;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box" id="test" style="color: purple;">div 标签</div>
+</body>
+
+</html>
+```
+
+叠加计算：如果是**复合选择器**，则需要权重叠加计算。
+
+公式：（每一级之间**不存在进位**）
+
+（**行内**样式,  **id**选择器个数,  **类**选择器个数,  **标签**选择器个数）
+
+规则：
+
+- **从左向右**依次比较选个数，**同一级**个数**多**的优先级**高**，如果个数相同，则向后比较
+- `!important` 权重最高
+- 继承权重最低
+
+示例-1：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* （行内样式,  id选择器个数,  类选择器个数,  标签选择器个数） */
+        /* (0, 0, 2, 1) */
+        .c1 .c2 div {
+            color: blue;
+        }
+
+        /* (0, 1, 0, 1) */
+        div #box3 {
+            color: green;
+        }
+
+        /* (0, 1, 1, 0) */
+        #box1 .c3 {
+            color: orange;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box1" class="c1">
+        <div id="box2" class="c2">
+            <div id="box3" class="c3">
+                这行文本是什么颜色？
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+```
+
+```
+结果为：orange
+```
+
+示例-2：
+
+```html
+<style>
+  div p {
+  color: red;
+  }
+
+  .father {
+  color: blue;
+  }
+</style>
+
+<body>
+    <div class="father">
+        <p class="son">
+            文字
+        </p>
+    </div>
+</body>
+```
+
+```
+结果为：red
+```
+
+示例-3：
+
+```html
+<style>
+    /* （行内样式,  id选择器个数,  类选择器个数,  标签选择器个数） */
+    /* (0, 2, 0, 0) */
+    #father #son {
+        color: blue;
+    }
+
+    /* (0, 1, 1, 1) */
+    #father p.c2 {
+        color: black;
+    }
+
+    /* (0, 0, 2, 2) */
+    div.c1 p.c2 {
+        color: red;
+    }
+
+    /* 继承 */
+    #father
+        {
+        color: green !important;
+    }
+
+    /* 继承 */
+    div#father.c1 {
+        color: yellow;
+    }
+</style>
+
+<body>
+    <div id="father" class="c1">
+        <p id="son" class="c2">
+            文字
+        </p>
+    </div>
+</body>
+```
+
+```
+结果为：blue
+```
+
