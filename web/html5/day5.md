@@ -886,7 +886,7 @@ border-radius: 10px 40px 80px;
 border-radius: 10px 80px;
 ```
 
-- 正圆形状：给**正方形**盒子设置圆角属性值为 **宽高的一半 / 50%**
+- 正圆形状：给**正方形**盒子设置圆角属性值为 **宽高的一半 / 50%**.（最大值为50%，超过50%没有效果）
 
 ```css
 img {
@@ -907,5 +907,186 @@ div {
   background-color: orange;
   border-radius: 40px;
 }
+```
+
+---
+
+## 盒子模型 – 阴影（拓展）
+
+作用：给元素设置**阴影**效果
+
+属性名：**box-shadow**
+
+属性值：**X 轴偏移量  Y 轴偏移量**  模糊半径  扩散半径  颜色  内外阴影
+
+注意： 
+
+* X 轴偏移量 和 Y 轴偏移量 **必须**书写
+* **默认是外阴影**，内阴影需要添加 **inset**
+
+```css
+div {
+  width: 200px;
+  height: 80px;
+  background-color: orange;
+  box-shadow: 2px 5px 10px 0 rgba(0, 0, 0, 0.5) inset;
+}
+```
+
+---
+
+## 综合案例——产品卡片
+
+CSS 书写顺序：
+
+1. 盒子模型属性
+2. 文字样式
+3. 圆角、阴影等修饰属性
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f1f1f1;
+        }
+
+        .product {
+            width: 270px;
+            height: 253px;
+            background-color: #fff;
+            margin: 50px auto;
+            padding-top: 40px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+        }
+
+        .product h4 {
+            margin-top: 20px;
+            margin-bottom: 12px;
+            font-size: 18px;
+            color: #333;
+            font-weight: 400;
+        }
+
+        .product p {
+            font-size: 12px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="product">
+        <img src="./imgs/1.jpg" alt="">
+        <h4>抖音直播 SDK</h4>
+        <p>包含抖音直播看播功能</p>
+    </div>
+</body>
+</html>
+```
+
+---
+
+## 综合案例——新闻列表
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新闻列表</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            list-style: none;
+            text-decoration: none;
+        }
+
+        .news {
+            margin: 30px auto;
+            width: 360px;
+            height: 180px;
+        }
+
+        .news .head {
+            background-color: #eee;
+            height: 34px;
+            border: 1px solid #dbdee1;
+            border-left: 0px solid #fff;
+        }
+
+        .news .head a {
+            margin-top: -1px;
+            display: block;
+            background-color: #fff;
+            width: 48px;
+            height: 34px;
+            border-top: 3px solid #ff8400;
+            border-right: 1px solid #dbdee1;
+            text-align: center;
+            line-height: 32px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .news .body {
+            padding: 5px;
+        }
+
+        .news .body li {
+            background-image: url(./imgs/square.png);
+            background-repeat: no-repeat;
+            background-position: 0 center;
+            padding-left: 15px;
+        }
+
+        .news .body li a {
+            background: url(./imgs/img.gif) no-repeat 0 center;
+            padding-left: 20px;
+            font-size: 12px;
+            color: #666;
+            line-height: 24px;
+        }
+
+        .news .body li a:hover {
+            color: #ff8400;
+        }
+    </style>
+</head>
+<body>
+    <div class="news">
+        <div class="head"><a href="#">新闻</a></div>
+        <div class="body">
+            <ul>
+                <li><a href="#">点赞 “新农人” 温暖的伸手</a></li>
+                <li><a href="#">在希望的田野上...</a></li>
+                <li><a href="#">“中国天眼” 又有新发现 已在《自然》杂志发表</a></li>
+                <li><a href="#">急！这个领域，缺人！月薪 4 万元还不好招！啥情况？</a></li>
+                <li><a href="#">G9 “带货” 背后：亏损面持续扩大，竞争环境激烈</a></li>
+                <li><a href="#">多地力推二手房 “带押过户”，有什么好处？</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
 ```
 
