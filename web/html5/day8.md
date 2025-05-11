@@ -375,3 +375,376 @@ iconfont 图标库：<https://www.iconfont.cn/>
 | bottom     | 底部对齐         |
 
 >谁占的空间大，就给谁加 vertical-align 属性
+
+---
+
+### 过渡 transition
+
+作用：可以为**一个元素**在**不同状态**之间切换的时候添加**过渡效果**
+
+属性名：**transition（复合属性）**
+
+属性值：**过渡的属性  花费时间 (s)**
+
+提示：
+
+* 过渡的属性可以是**具体的 CSS 属性**
+* 也可以为 all（两个状态**属性值不同**的所有属性，都产生过渡效果）
+* transition 设置给**元素本身**
+
+```css
+img {
+  width: 200px;
+  height: 200px;
+  transition: all 1s;
+}
+
+img:hover {
+  width: 500px;
+  height: 500px;
+}
+```
+
+----
+
+### 透明度 opacity
+
+作用：设置**整个元素的透明度**（包含**背景和内容**）
+
+属性名：**opacity**
+
+属性值：0 – 1
+
+* 0：**完全透明**（元素不可见）
+* 1：**不透明**
+* 0-1之间**小数：半透明**
+
+```css
+div {
+  width: 500px;
+  height: 500px;
+  background-color: orange;
+
+  /* opacity: 0; */
+  /* opacity: 1; */
+  opacity: 0.5;
+}
+```
+
+----
+
+### 光标类型 cursor
+
+作用：鼠标**悬停**在元素上时**指针显示样式**
+
+属性名：**cursor**
+
+| 属性值  | 效果                         |
+| ------- | ---------------------------- |
+| default | 默认值，通常是箭头           |
+| pointer | 小手效果，提示用户可以点击   |
+| text    | 工字型，提示用户可以选择文字 |
+| move    | 十字光标，提示用户可以移动   |
+
+```css
+div {
+  width: 200px;
+  height: 200px;
+  background-color: pink;
+
+  /* cursor: pointer; */
+  /* cursor: text; */
+  cursor: move;
+}
+```
+
+---
+
+## 综合案例—轮播图
+
+技术点：
+
+1、定位 
+
+2、 字体图标 
+
+3、 Flex 布局
+
+#### HTML结构
+
+```html
+<div class="banner">
+    <!-- 图: ul > li -->
+    <ul>
+      <li><a href="#"><img src="./images/banner1.jpg" alt=""></a></li>
+      <li><a href="#"><img src="./images/banner2.jpg" alt=""></a></li>
+      <li><a href="#"><img src="./images/banner3.jpg" alt=""></a></li>
+    </ul>
+</div>
+```
+
+#### CSS样式
+
+```css
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+li {
+  list-style: none;
+}
+
+.banner {
+  position: relative;
+  margin: 100px auto;
+  width: 564px;
+  height: 315px;
+  /* background-color: pink; */
+  overflow: hidden;
+}
+
+/* 图片 */
+.banner img {
+  width: 564px;
+  border-radius: 12px;
+  vertical-align: middle;
+}
+
+.banner ul {
+  display: flex;
+}
+```
+
+### 箭头
+
+#### HTML结构
+
+```html
+<!-- 箭头 -->
+<!-- 上一张 prev -->
+<a href="#" class="prev">
+  <i class="iconfont icon-zuoce"></i>
+</a>
+<!-- 下一张 next -->
+<a href="#" class="next">
+  <i class="iconfont icon-youce"></i>
+</a>
+```
+
+#### CSS样式
+
+```css
+/* 箭头 */
+.banner .prev,
+.banner .next {
+  /* 隐藏 */
+  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 20px;
+  height: 30px;
+  background-color: rgba(0,0,0, 0.3);
+
+  text-decoration: none;
+  color: #fff;
+  line-height: 30px;
+}
+
+/* 鼠标滑到banner区域，箭头要显示 display:block */
+.banner:hover .prev,
+.banner:hover .next {
+  display: block;
+}
+
+.banner .prev {
+  left: 0;
+  border-radius: 0 15px 15px 0;
+}
+
+.banner .next {
+  right: 0;
+  border-radius: 15px 0 0 15px;
+  text-align: center;
+}
+```
+
+### 圆点
+
+#### HTML结构
+
+```html
+<!-- 圆点 -->
+<ol>
+  <li></li>
+  <li class="active"></li>
+  <li></li>
+</ol>
+```
+
+#### CSS样式
+
+```css
+/* 圆点 */
+.banner ol {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 13px;
+  background-color: rgba(255,255,255,0.3);
+
+  display: flex;
+
+  border-radius: 10px;
+}
+
+.banner ol li {
+  margin: 3px;
+  width: 8px;
+  height: 8px;
+  background-color: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* 橙色的li */
+.banner ol .active {
+  background-color: #ff5000;
+}
+```
+
+### 完整代码
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轮播图</title>
+    <link rel="stylesheet" href="./iconfont/iconfont.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            list-style: none;
+        }
+
+        .banner {
+            position: relative;
+            width: 564px;
+            height: 315px;
+            margin: 100px auto;
+            overflow: hidden;
+        }
+
+        /* 图片 */
+        .banner img {
+            vertical-align: middle;
+            width: 564px;
+            border-radius: 12px;
+        }
+
+        .banner ul {
+            display: flex;
+        }
+
+        /* 箭头 */
+        .banner .prev,
+        .banner .next {
+            display: none;  /* 隐藏 */
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 30px;
+            background-color: rgba(0, 0, 0, 0.3);
+            text-decoration: none;
+            color: #fff;
+            line-height: 30px;
+        }
+
+        .banner:hover .prev,
+        .banner:hover .next{
+            display: block;
+        }
+
+        .banner .prev {
+            left: 0;
+            border-radius: 0 15px 15px 0;
+        }
+
+        .banner .next {
+            right: 0;
+            border-radius: 15px 0 0 15px;
+            text-align: center;
+        }
+
+        /* 圆点 */
+        .banner ol {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 13px;
+            background-color: rgba(255, 255, 255, 0.3);
+
+            display: flex;
+            border-radius: 10px;
+        }
+
+        .banner ol li {
+            width: 8px;
+            height: 8px;
+            background-color: #fff;
+            border-radius: 50%;
+            margin: 3px;
+            cursor: pointer;
+        }
+
+        .banner ol .active {
+            background-color: #ff5000;
+        }
+    </style>
+</head>
+<body>
+    <div class="banner">
+        <!-- 图片: ul > li-->
+         <ul>
+            <li><a href="#"><img src="./images/banner1.jpg" alt=""></a></li>
+            <li><a href="#"><img src="./images/banner2.jpg" alt=""></a></li>
+            <li><a href="#"><img src="./images/banner3.jpg" alt=""></a></li>
+         </ul>
+        <!-- 箭头 -->
+         <!-- 上一张 -->
+         <a href="#" class="prev">
+            <i class="iconfont icon-fanhui"></i>
+         </a>
+         <!-- 下一张 -->
+         <a href="#" class="next">
+            <i class="iconfont icon-jinru"></i>
+         </a>
+        <!-- 圆点 -->
+        <ol>
+            <li></li>
+            <li class="active"></li>
+            <li></li>
+        </ol>
+    </div>
+</body>
+</html>
+```
+
+
+
+
+
+
+
+
+
