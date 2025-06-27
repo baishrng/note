@@ -165,7 +165,7 @@ git rm -r --cached folder/
 | ------------------------------------- | ----------------------------- |
 | `git push origin mian`                | 将本地`main`分支上传到 github |
 | `git push --set-upstream origin main` |                               |
-|                                       |                               |
+| `git push --force origin main`        | 强制推送，忽略远程的更新      |
 
 **问题：**
 

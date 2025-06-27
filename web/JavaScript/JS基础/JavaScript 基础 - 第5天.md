@@ -461,6 +461,8 @@ Math.floor(Math.random() * (5 + 1)) + 5
 Math.floor(Math.random() * (M - N + 1)) + N
 ```
 
+#### 示例
+
 **示例1：**
 
 需求：请把    [‘赵云’, ‘黄忠’, ‘关羽’, ‘张飞’, ‘马超’, ‘刘备’, ‘曹操’]  随机显示一个名字到页面中
@@ -500,17 +502,96 @@ while (num !== ranNum) {
 alert('恭喜你，猜对了')
 ```
 
+**示例3：**
+
+需求：该函数接收一个布尔类型参数，表示颜色的格式是十六进制还是rgb格式。 
+
+分析： 提示： 16进制颜色格式为: ‘#ffffff’  其中f可以是任意 0-f之间的字符,需要用到数组， let arr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'] 
+
+提示:  rgb颜色格式为: ‘rgb(255,255,255) ’ 其中255可以是任意0-255之间的数字
+
+```html
+	<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div {
+            width: 200px;
+            height: 200px;
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script>
+        function getRandomColor(flag = true) {
+            let color = ''
+            if (flag) {
+                color += '#'
+                let colorArr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'f']
+                for (i = 0; i < 6; i++) {
+                    let k = Math.floor(Math.random() * colorArr.length)
+                    color += colorArr[k]
+                }
+            } else {
+                let r = Math.floor(Math.random() * 256)
+                let g = Math.floor(Math.random() * 256)
+                let b = Math.floor(Math.random() * 256)
+                color = `rgb(${r}, ${g}, ${b})`
+            }
+            return color
+        }
+        let color1 = getRandomColor(true)
+        let color2 = getRandomColor(false)
+        console.log(color1)
+        console.log(color2)
+        document.write(`<div style='background-color:${color1};'></div>`)
+        document.write(`<div style='background-color:${color2};'></div>`)
+    </script>
+</body>
+
+</html>
+```
+
+![image-20250627095211144](assets/image-20250627095211144.png)
+
 ---
 
 ## 综合案例-学成在线页面渲染案例
 
+![image-20250627100318977](assets/image-20250627100318977.png)
 
+---
 
+## 拓展
 
+### 术语解释
 
+| 术语           | 解释                                                       | 举例                                              |
+| -------------- | ---------------------------------------------------------- | ------------------------------------------------- |
+| 关键字         | 在JavaScript中有特殊意义的词汇                             | let、var、function、if、else、switch、case、break |
+| 保留字         | 在目前的JavaScript中没意义，但未来可能会具有特殊意义的词汇 | int、short、long、char                            |
+| 标识（标识符） | 变量名、函数名的另一种叫法                                 | 无                                                |
+| 表达式         | 能产生值的代码，一般配合运算符出现                         | 10 + 3、age >= 18                                 |
+| 语句           | 一段可执行的代码                                           | if() for()                                        |
 
+### 基本数据类型和引用数据类型
 
+简单类型又叫做基本数据类型或者**值类型**，复杂类型又叫做**引用类型**。
 
+- 值类型：简单数据类型/基本数据类型，在存储时变量中存储的是值本身，因此叫做值类型。如string ，number，boolean，undefined，null
+- 引用类型：复杂数据类型，在存储时变量中存储的仅仅是地址（引用），因此叫做引用数据类型 通过 new 关键字创建的对象（系统对象、自定义对象），如 Object、Array、Date等
+
+堆栈空间分配区别：
+
+- 栈（操作系统）：由操作系统自动分配释放存放函数的参数值、局部变量的值等。其操作方式类似于数据结构中的 栈；（**简单数据类型存放到栈里面**）
+- 堆（操作系统）：存储复杂类型(对象)，一般由程序员分配释放，若程序员不释放，由垃圾回收机制回收。（**引用数据类型存放到堆里面**）
 
 
 
