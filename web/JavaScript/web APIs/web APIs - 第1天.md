@@ -514,15 +514,40 @@ box.style.backgroundColor = 'pink'
 表单.type = 'password'
 ```
 
+```html
+<body>
+    <input type="text" value="电脑">
+    <script>
+        const input = document.querySelector('input')
+        console.log(input.value)
+        console.log(input.type)
+        input.value = '手机'
+        input.type = 'password'
+    </script>
+</body>
+```
+
 表单属性中添加就有效果,移除就没有效果,一律使用布尔值表示 如果为`true `代表添加了该属性 如果是`false `代 表移除了该属性
 
 比如： disabled、checked、selected
 
+例如：
+
+```html
+<body>
+    <input type="checkbox" name="" id="">小明
+    <script>
+        const input = document.querySelector('input')
+        input.checked = true
+    </script>
+</body>
+```
+
 ### 自定义属性
 
-标准属性: 标签天生自带的属性 比如class id title等, 可以直接使用点语法操作比如： disabled、checked、selected
+**标准属性:** 标签天生自带的属性 比如class id title等, 可以直接使用点语法操作比如： disabled、checked、selected
 
-自定义属性：
+**自定义属性：**
 
 - 在html5中推出来了专门的`data-`自定义属性  
 
@@ -543,6 +568,255 @@ box.style.backgroundColor = 'pink'
   </script>
 </body>
 ```
+
+---
+
+## 定时器-间歇函数
+
+定时器函数可以开启和关闭定时器
+
+1. **开启定时器**
+
+```JS
+setInterval(函数, 间隔时间)
+```
+
+- 作用：每隔一段时间调用这个函数
+- 间隔时间单位是毫秒
+
+例如：
+
+```JS
+function repeat() {
+    console.log('前端程序员，就是头发多咋滴~~')
+}
+// 每隔一秒调用repeat函数
+setInterval(repeat, 1000)
+// 或者
+setInterval('repeat()', 1000)
+```
+
+>  注意：
+>
+> 1. 函数名字不需要加括号
+> 2. **定时器返回的是一个id数字**
+
+2. **关闭定时器**
+
+```JS
+let 变量名 = setInterval(函数, 间隔时间)
+clearInterval(变量名)
+```
+
+一般不会刚创建就停止，而是满足一定条件再停止
+
+例如：
+
+```JS
+let timer = setInterval(function() {
+    console.log('hi~~')
+}, 1000)
+clearInterval(timer)
+```
+
+**示例：**阅读注册协议
+
+需求：按钮60秒之后才可以使用
+
+```html
+<body>
+    <textarea name="" id="" cols="30" rows="10">
+        用户注册协议
+        欢迎注册成为京东用户！在您注册过程中，您需要完成我们的注册流程并通过点击同意的形式在线签署以下协议，请您务必仔细阅读、充分理解协议中的条款内容后再点击同意（尤其是以粗体或下划线标识的条款，因为这些条款可能会明确您应履行的义务或对您的权利有所限制）。
+        【请您注意】如果您不同意以下协议全部或任何条款约定，请您停止注册。您停止注册后将仅可以浏览我们的商品信息但无法享受我们的产品或服务。如您按照注册流程提示填写信息，阅读并点击同意上述协议且完成全部注册流程后，即表示您已充分阅读、理解并接受协议的全部内容，并表明您同意我们可以依据协议内容来处理您的个人信息，并同意我们将您的订单信息共享给为完成此订单所必须的第三方合作方（详情查看
+    </textarea>
+    <br>
+    <button class="btn" disabled>我已经阅读用户协议(60)</button>
+
+    <script>
+        const bt = document.querySelector('.btn')
+        let second = 5
+        let timer = setInterval(function () {
+            if (second === 0) {
+                clearInterval(timer)
+                bt.disabled = false
+                bt.innerText = `同意`
+                return
+            }
+            second--
+            bt.innerText = `我已经阅读用户协议(${second})`
+        }, 1000)
+    </script>
+</body>
+```
+
+----
+
+## 综合案例-轮播图定时器版
+
+需求：每隔一秒钟切换一个图片
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>轮播图点击切换</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .slider {
+            width: 560px;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .slider-wrapper {
+            width: 100%;
+            height: 320px;
+        }
+
+        .slider-wrapper img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .slider-footer {
+            height: 80px;
+            background-color: rgb(100, 67, 68);
+            padding: 12px 12px 0 12px;
+            position: relative;
+        }
+
+        .slider-footer .toggle {
+            position: absolute;
+            right: 0;
+            top: 12px;
+            display: flex;
+        }
+
+        .slider-footer .toggle button {
+            margin-right: 12px;
+            width: 28px;
+            height: 28px;
+            appearance: none;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .slider-footer .toggle button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .slider-footer p {
+            margin: 0;
+            color: #fff;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .slider-indicator {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .slider-indicator li {
+            width: 8px;
+            height: 8px;
+            margin: 4px;
+            border-radius: 50%;
+            background: #fff;
+            opacity: 0.4;
+            cursor: pointer;
+        }
+
+        .slider-indicator li.active {
+            width: 12px;
+            height: 12px;
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slider">
+        <div class="slider-wrapper">
+            <img src="./images/slider01.jpg" alt="" />
+        </div>
+        <div class="slider-footer">
+            <p>对人类来说会不会太超前了？</p>
+            <ul class="slider-indicator">
+                <li class="active"></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <div class="toggle">
+                <button class="prev">&lt;</button>
+                <button class="next">&gt;</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        // 1. 初始数据
+        const sliderData = [
+            { url: './images/slider01.jpg', title: '对人类来说会不会太超前了？', color: 'rgb(100, 67, 68)' },
+            { url: './images/slider02.jpg', title: '开启剑与雪的黑暗传说！', color: 'rgb(43, 35, 26)' },
+            { url: './images/slider03.jpg', title: '真正的jo厨出现了！', color: 'rgb(36, 31, 33)' },
+            { url: './images/slider04.jpg', title: '李玉刚：让世界通过B站看到东方大国文化', color: 'rgb(139, 98, 66)' },
+            { url: './images/slider05.jpg', title: '快来分享你的寒假日常吧~', color: 'rgb(67, 90, 92)' },
+            { url: './images/slider06.jpg', title: '哔哩哔哩小年YEAH', color: 'rgb(166, 131, 143)' },
+            { url: './images/slider07.jpg', title: '一站式解决你的电脑配置问题！！！', color: 'rgb(53, 29, 25)' },
+            { url: './images/slider08.jpg', title: '谁不想和小猫咪贴贴呢！', color: 'rgb(99, 72, 114)' },
+        ]
+
+        let i = 0
+        let timer = setInterval(function () {
+            // 修改 i 的值
+            i = parseInt((i + 1) % sliderData.length)
+
+            // 换图片
+            const img = document.querySelector('.slider-wrapper img')
+            img.src = sliderData[i].url
+
+            // 换文字
+            const p = document.querySelector('.slider-footer p')
+            p.innerText = sliderData[i].title
+
+            // 换背景色
+            const footer = document.querySelector('.slider-footer')
+            footer.style.backgroundColor = sliderData[i].color
+
+            // 删除上一个小圆点的激活状态
+            document.querySelector(`.slider-indicator .active`).classList.remove('active')
+
+            // 为当前小圆点添加激活状态
+            document.querySelector(`.slider-indicator li:nth-child(${(i + 1)})`).classList.add('active')
+        }, 1000)
+
+    </script>
+</body>
+
+</html>
+```
+
+![image-20250628161659042](assets/image-20250628161659042.png)
 
 
 
