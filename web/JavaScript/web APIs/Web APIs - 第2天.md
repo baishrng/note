@@ -423,17 +423,404 @@ DOM L2：事件源.addEventListener(事件， 事件处理函数)
 
 - `input` 用户输入事件
 
+**示例：**评论字数统计
 
+需求：用户输入文字，可以计算用户输入的字数
 
+提示：使用`value.length`获取文本长度
 
+```html
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>评论回车发布</title>
+    <style>
+        .wrapper {
+            min-width: 400px;
+            max-width: 800px;
+            display: flex;
+            justify-content: flex-end;
+        }
 
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: url(./images/avatar.jpg) no-repeat center / cover;
+            margin-right: 20px;
+        }
 
+        .wrapper textarea {
+            outline: none;
+            border-color: transparent;
+            resize: none;
+            background: #f5f5f5;
+            border-radius: 4px;
+            flex: 1;
+            padding: 10px;
+            transition: all 0.5s;
+            height: 30px;
+        }
 
+        .wrapper textarea:focus {
+            border-color: #e4e4e4;
+            background: #fff;
+            height: 50px;
+        }
 
+        .wrapper button {
+            background: #00aeec;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            margin-left: 10px;
+            width: 70px;
+            cursor: pointer;
+        }
 
+        .wrapper .total {
+            margin-right: 80px;
+            color: #999;
+            margin-top: 5px;
+            opacity: 0;
+            transition: all 0.5s;
+        }
+    </style>
+</head>
 
+<body>
+    <div class="wrapper">
+        <i class="avatar"></i>
+        <textarea id="tx" placeholder="发一条友善的评论" rows="2" maxlength="200"></textarea>
+        <button>发布</button>
+    </div>
+    <div class="wrapper">
+        <span class="total">0/200字</span>
+    </div>
 
+    <script>
+        const textarea = document.querySelector('#tx')
+        const total = document.querySelector('.wrapper .total')
+        // 当文本域获得焦点，字数显示
+        textarea.addEventListener('focus', function () {
+            total.style.opacity = '1'
+        })
+        // 当文本域失去焦点，字数不显示
+        textarea.addEventListener('blur', function () {
+            total.style.opacity = '0'
+        })
+
+        textarea.addEventListener('input', function () {
+            const textLength = textarea.value.length
+            total.innerText = `${textLength}/200字`
+        })
+    </script>
+</body>
+
+</html>
+```
+
+----
+
+## 事件对象
+
+任意事件类型被触发时与事件相关的信息会被以对象的形式记录下来，我们称这个对象为事件对象。
+
+使用场景：
+
+- 可以判断用户按下哪个键，比如按下回车键可以发布新闻
+- 可以判断用户按下哪个键，比如按下回车键可以发布新闻
+
+### 获取事件对象
+
+- **语法：**
+
+在事件绑定的回调函数的第一个参数就是事件对象
+
+一般命名为event、ev、e
+
+```JS
+元素.addEventListener('click', function (e) {
+})
+```
+
+### 事件对象常用属性
+
+**部分常用属性：**
+
+- `type` ：获取当前的事件类型
+- `clientX/clientY` ： 获取光标相对于浏览器可见窗口左上角的位置
+- `offsetX/offsetY` ： 获取光标相对于当前DOM元素左上角的位置
+- `key` ： 用户按下的键盘键的值（现在不提倡使用keyCode）
+
+**示例：**评论回车发布
+
+需求：按下回车键盘，可以发布信息
+
+> **`trim()`** 去除字符串两端的空白字符，包括空格、制表符（`\t`）以及换行符（`\n`、`\r\n` ）
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>评论回车发布</title>
+    <style>
+        .wrapper {
+            min-width: 400px;
+            max-width: 800px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: url(./images/avatar.jpg) no-repeat center / cover;
+            margin-right: 20px;
+        }
+
+        .wrapper textarea {
+            outline: none;
+            border-color: transparent;
+            resize: none;
+            background: #f5f5f5;
+            border-radius: 4px;
+            flex: 1;
+            padding: 10px;
+            transition: all 0.5s;
+            height: 30px;
+        }
+
+        .wrapper textarea:focus {
+            border-color: #e4e4e4;
+            background: #fff;
+            height: 50px;
+        }
+
+        .wrapper button {
+            background: #00aeec;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            margin-left: 10px;
+            width: 70px;
+            cursor: pointer;
+        }
+
+        .wrapper .total {
+            margin-right: 80px;
+            color: #999;
+            margin-top: 5px;
+            opacity: 0;
+            transition: all 0.5s;
+        }
+
+        .list {
+            min-width: 400px;
+            max-width: 800px;
+            display: flex;
+        }
+
+        .list .item {
+            width: 100%;
+            display: flex;
+        }
+
+        .list .item .info {
+            flex: 1;
+            border-bottom: 1px dashed #e4e4e4;
+            padding-bottom: 10px;
+        }
+
+        .list .item p {
+            margin: 0;
+        }
+
+        .list .item .name {
+            color: #FB7299;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .list .item .text {
+            color: #333;
+            padding: 10px 0;
+        }
+
+        .list .item .time {
+            color: #999;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <i class="avatar"></i>
+        <textarea id="tx" placeholder="发一条友善的评论" rows="2" maxlength="200"></textarea>
+        <button>发布</button>
+    </div>
+    <div class="wrapper">
+        <span class="total">0/200字</span>
+    </div>
+    <div class="list">
+        <div class="item" style="display: none;">
+            <i class="avatar"></i>
+            <div class="info">
+                <p class="name">清风徐来</p>
+                <p class="text">大家都辛苦啦，感谢各位大大的努力，能圆满完成真是太好了[笑哭][支持]</p>
+                <p class="time">2022-10-10 20:29:21</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const textarea = document.querySelector('#tx')
+        const total = document.querySelector('.wrapper .total')
+        // 当文本域获得焦点，字数显示
+        textarea.addEventListener('focus', function () {
+            total.style.opacity = '1'
+        })
+        // 当文本域失去焦点，字数不显示
+        textarea.addEventListener('blur', function () {
+            total.style.opacity = '0'
+        })
+
+        textarea.addEventListener('input', function () {
+            const textLength = textarea.value.length
+            total.innerText = `${textLength}/200字`
+        })
+
+        textarea.addEventListener('keyup', function (e) {
+            if (e.key === 'Enter') {
+                if (textarea.value.trim() !== '') {
+                    const item = document.querySelector('.list .item')
+                    const text = document.querySelector('.list .item .info .text')
+                    text.innerText = textarea.value.trim()
+                    item.style.display = 'block'
+                }
+                textarea.value = ''     // 清空文本域
+                total.innerText = `0/200字`
+            }
+        })
+    </script>
+</body>
+
+</html>
+```
+
+----
+
+## 环境对象
+
+环境对象指的是函数内部特殊的变量 `this` ，它代表着当前函数运行时所处的环境。每个函数里面都有`this`。
+
+1. `this` 本质上是一个变量，数据类型为对象
+2. 函数的调用方式不同 `this` 变量的值也不同
+3. 【谁调用 `this` 就是谁】是判断 `this` 值的粗略规则
+4. 函数直接调用时实际上 `window.sayHi()` 所以 `this` 的值为 `window`
+
+```JS
+<script>
+  // 声明函数
+  function sayHi() {
+    // this 是一个变量
+    console.log(this);
+  }
+
+  // 声明一个对象
+  let user = {
+    name: '张三',
+    sayHi: sayHi // 此处把 sayHi 函数，赋值给 sayHi 属性
+  }
+  
+  let person = {
+    name: '李四',
+    sayHi: sayHi
+  }
+
+  // 直接调用
+  sayHi() // window
+  window.sayHi() // window
+
+  // 做为对象方法调用
+  user.sayHi()// user
+	person.sayHi()// person
+</script>
+```
+
+----
+
+## 回调函数
+
+如果将函数 A 做为参数传递给函数 B 时，我们称函数 A 为**回调函数**
+
+```html
+<script>
+  // 声明 foo 函数
+  function foo(arg) {
+    console.log(arg);
+  }
+
+  // 普通的值做为参数
+  foo(10);
+  foo('hello world!');
+  foo(['html', 'css', 'javascript']);
+
+  function bar() {
+    console.log('函数也能当参数...');
+  }
+  // 函数也可以做为参数！！！！
+  foo(bar);
+</script>
+```
+
+函数 `bar` 做参数传给了 `foo` 函数，`bar` 就是所谓的回调函数了！！！
+
+我们回顾一下间歇函数 `setInterval` 
+
+```html
+<script>
+	function fn() {
+    console.log('我是回调函数...');
+  }
+  // 调用定时器
+  setInterval(fn, 1000);
+</script>
+```
+
+`fn` 函数做为参数传给了 `setInterval` ，这便是回调函数的实际应用了，结合刚刚学习的函数表达式上述代码还有另一种更常见写法。
+
+```html
+<script>
+  // 调用定时器，匿名函数做为参数
+  setInterval(function () {
+    console.log('我是回调函数...');
+  }, 1000);
+</script>
+```
+
+结论：
+
+1. 回调函数本质还是函数，只不过把它当成参数使用
+2. 使用匿名函数做为回调函数比较常见
+
+----
+
+## 综合案例-Tab栏切换
+
+需求：鼠标经过不同的选项卡，底部可以显示 不同的内容
 
 
 
