@@ -818,9 +818,248 @@ DOM L2：事件源.addEventListener(事件， 事件处理函数)
 
 ----
 
-## 综合案例-Tab栏切换
+## 综合案例
+
+### Tab栏切换
 
 需求：鼠标经过不同的选项卡，底部可以显示 不同的内容
+
+```HTML
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tab栏切换</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .tab {
+            width: 590px;
+            height: 340px;
+            margin: 20px;
+            border: 1px solid #e4e4e4;
+        }
+
+        .tab-nav {
+            width: 100%;
+            height: 60px;
+            line-height: 60px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .tab-nav h3 {
+            font-size: 24px;
+            font-weight: normal;
+            margin-left: 20px;
+        }
+
+        .tab-nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .tab-nav ul li {
+            margin: 0 20px;
+            font-size: 14px;
+        }
+
+        .tab-nav ul li a {
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            color: #333;
+        }
+
+        .tab-nav ul li a.active {
+            border-color: #e1251b;
+            color: #e1251b;
+        }
+
+        .tab-content {
+            padding: 0 16px;
+        }
+
+        .tab-content .item {
+            display: none;
+        }
+
+        .tab-content .item.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="tab">
+        <div class="tab-nav">
+            <h3>每日特价</h3>
+            <ul>
+                <li><a class="active" href="javascript:;">精选</a></li>
+                <li><a href="javascript:;">美食</a></li>
+                <li><a href="javascript:;">百货</a></li>
+                <li><a href="javascript:;">个护</a></li>
+                <li><a href="javascript:;">预告</a></li>
+            </ul>
+        </div>
+        <div class="tab-content">
+            <div class="item active"><img src="./images/tab00.png" alt="" /></div>
+            <div class="item"><img src="./images/tab01.png" alt="" /></div>
+            <div class="item"><img src="./images/tab02.png" alt="" /></div>
+            <div class="item"><img src="./images/tab03.png" alt="" /></div>
+            <div class="item"><img src="./images/tab04.png" alt="" /></div>
+        </div>
+    </div>
+
+    <script>
+        const lis = document.querySelectorAll('.tab-nav ul li')
+        const items = document.querySelectorAll('.tab-content .item')
+        for (let i = 0; i < lis.length; i++) {
+            lis[i].addEventListener('mouseenter', function () {
+                // 切换标签
+                document.querySelector('.tab-nav ul .active').classList.remove('active')
+                this.children[0].classList.add('active')
+                // 切换图片
+                document.querySelector('.tab-content .active').classList.remove('active')
+                items[i].classList.add('active')
+            })
+        }
+    </script>
+</body>
+
+</html>
+```
+
+![image-20250705193508530](assets/image-20250705193508530.png)
+
+### 全选文本框
+
+需求：用户点击全选，则下面复选框全部选择，取消全选则全部取消
+
+```html
+<!DOCTYPE html>
+
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            border: 1px solid #c0c0c0;
+            width: 500px;
+            margin: 100px auto;
+            text-align: center;
+        }
+
+        th {
+            background-color: #09c;
+            font: bold 16px "微软雅黑";
+            color: #fff;
+            height: 24px;
+        }
+
+        td {
+            border: 1px solid #d0d0d0;
+            color: #404060;
+            padding: 10px;
+        }
+
+        .allCheck {
+            width: 80px;
+        }
+    </style>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <th class="allCheck">
+                <input type="checkbox" name="" id="checkAll"> <span class="all">全选</span>
+            </th>
+            <th>商品</th>
+            <th>商家</th>
+            <th>价格</th>
+        </tr>
+        <tr>
+            <td>
+                <input type="checkbox" name="check" class="ck">
+            </td>
+            <td>小米手机</td>
+            <td>小米</td>
+            <td>￥1999</td>
+        </tr>
+        <tr>
+            <td>
+                <input type="checkbox" name="check" class="ck">
+            </td>
+            <td>小米净水器</td>
+            <td>小米</td>
+            <td>￥4999</td>
+        </tr>
+        <tr>
+            <td>
+                <input type="checkbox" name="check" class="ck">
+            </td>
+            <td>小米电视</td>
+            <td>小米</td>
+            <td>￥5999</td>
+        </tr>
+    </table>
+    <script>
+        // 获取按钮对象
+        const checkAll = document.querySelector('#checkAll')
+        const checks = document.querySelectorAll('table .ck')
+
+        // 全选按钮-添加事件处理
+        checkAll.addEventListener('input', function () {
+            for (let i = 0; i < checks.length; i++) {
+                checks[i].checked = this.checked
+            }
+        })
+
+        // 单选按钮-添加事件处理
+        // 方法一
+        // for (let i = 0; i < checks.length; i++) {
+        //     checks[i].addEventListener('input', function () {
+        //         let flag = true     // 判断所有单选按钮是否已经全部选中
+        //         for (let ck of checks) {
+        //             flag = Boolean(flag && ck.checked)
+        //         }
+        //         checkAll.checked = flag
+        //     })
+        // }
+        // 方法二
+        for (let ck of checks) {
+            ck.addEventListener('input', function () {
+                const num = document.querySelectorAll('table .ck:checked').length  // 选中的小复选框的个数
+                checkAll.checked = num === checks.length
+            })
+        }
+    </script>
+</body>
+
+</html>
+```
+
+
+
+
+
+
 
 
 
