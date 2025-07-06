@@ -88,6 +88,8 @@ son.addEventListener('click', function (e) {
 })
 ```
 
+### 阻止默认行为
+
 **我们某些情况下需要**阻止默认行为的发生，比如 阻止 链接的跳转，表单域跳转
 
 **语法：**
@@ -165,11 +167,254 @@ btn.removeEventListener('click', fn)
 - 必须使用removeEventListener(事件类型, 事件处理函数, 获取捕获或者冒泡阶段)
 - 匿名函数无法被解绑
 
+----
 
+## 事件委托
 
+事件委托是利用事件流的特征解决一些现实开发需求的知识技巧，主要的作用是提升程序效率。
 
+**优点：**减少注册次数，可以提高程序性能（大量的事件监听是比较耗费性能的）
 
+**原理：**事件委托其实是利用事件冒泡的特点。给**父元素注册事件**，当我们触发子元素的时候，会冒泡到父元素身上，从而触发父元素的事 件
 
+**实现：**`事件对象.target.tagName `可以获得真正触发事件的元素
+
+如：
+
+```JS
+const ul = document.querySelector('ul')
+ul.addEventListener('click', function (e) {
+    // console.dir(e.target)
+    if (e.target.tagName === 'LI') {
+        e.target.style.color = 'pink'
+    }
+})
+```
+
+**示例：**tab栏切换改造
+
+需求：优化程序，将tab切换案例改为事件委托写法
+
+> 1. 使用`mouseover`
+> 2. 使用自定义属性
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tab栏切换</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .tab {
+            width: 590px;
+            height: 340px;
+            margin: 20px;
+            border: 1px solid #e4e4e4;
+        }
+
+        .tab-nav {
+            width: 100%;
+            height: 60px;
+            line-height: 60px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .tab-nav h3 {
+            font-size: 24px;
+            font-weight: normal;
+            margin-left: 20px;
+        }
+
+        .tab-nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .tab-nav ul li {
+            margin: 0 20px;
+            font-size: 14px;
+        }
+
+        .tab-nav ul li a {
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            color: #333;
+        }
+
+        .tab-nav ul li a.active {
+            border-color: #e1251b;
+            color: #e1251b;
+        }
+
+        .tab-content {
+            padding: 0 16px;
+        }
+
+        .tab-content .item {
+            display: none;
+        }
+
+        .tab-content .item.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="tab">
+        <div class="tab-nav">
+            <h3>每日特价</h3>
+            <ul>
+                <li><a class="active" href="javascript:;" data-id="0">精选</a></li>
+                <li><a href="javascript:;" data-id="1">美食</a></li>
+                <li><a href="javascript:;" data-id="2">百货</a></li>
+                <li><a href="javascript:;" data-id="3">个护</a></li>
+                <li><a href="javascript:;" data-id="4">预告</a></li>
+            </ul>
+        </div>
+        <div class="tab-content">
+            <div class="item active"><img src="./images/tab00.png" alt="" /></div>
+            <div class="item"><img src="./images/tab01.png" alt="" /></div>
+            <div class="item"><img src="./images/tab02.png" alt="" /></div>
+            <div class="item"><img src="./images/tab03.png" alt="" /></div>
+            <div class="item"><img src="./images/tab04.png" alt="" /></div>
+        </div>
+    </div>
+
+    <script>
+        // mouseenter 和 mouseleave 没有冒泡效果
+        // mouseover 和 mouseout 有冒泡效果
+        const ul = document.querySelector('.tab-nav ul')
+        ul.addEventListener('mouseover', function (e) {
+            if (e.target.tagName === 'A') {
+                document.querySelector('.tab-nav ul .active').classList.remove('active')
+                e.target.classList.add('active')
+                // 切换图片
+                const index = Number(e.target.dataset.id)
+                document.querySelector('.tab-content .active').classList.remove('active')
+                document.querySelector(`.tab-content .item:nth-child(${index + 1})`).classList.add('active')
+            }
+        })
+    </script>
+</body>
+
+</html>
+```
+
+---
+
+## 其他事件
+
+### 页面加载事件
+
+加载外部资源（如图片、外联CSS和JavaScript等）加载完毕时触发的事件
+
+有些时候需要等页面资源全部处理完了做一些事情
+
+**事件名：load**
+
+监听页面所有资源加载完毕：
+
+~~~javascript
+window.addEventListener('load', function() {
+    // xxxxx
+})
+~~~
+
+> 注意：不光可以监听整个页面资源加载完毕，也可以针对某个资源绑定load事件
+
+​	当初始的 HTML 文档被完全加载和解析完成之后，DOMContentLoaded 事件被触发，而无需等待样式表、图像等完 全加载
+
+**事件名：DOMContentLoaded**
+
+监听页面DOM加载完毕：
+
+```JS
+document.addEventListener('DOMContentLoaded', function () {
+    // 执行的操作
+})
+```
+
+### 元素滚动事件
+
+滚动条在滚动的时候持续触发的事件
+
+**事件名：scroll**
+
+监听整个页面滚动：
+
+~~~javascript
+window.addEventListener('scroll', function() {
+    // xxxxx
+})
+~~~
+
+给 window 或 document 添加 scroll 事件
+
+监听某个元素的内部滚动直接给某个元素加即可
+
+#### 获取位置
+
+1. `scrollLeft`和`scrollTop `（属性）
+
+- 获取被卷去的大小
+
+- 获取元素内容往左、往上滚出去看不到的距离
+
+- 这两个值是可读写的
+
+2. 尽量在scroll事件里面获取被卷去的距离
+
+```JS
+div.addEventListener('scroll', function () {
+    console.log(this.scrollTop)
+})
+```
+
+![image-20250706205721006](assets/image-20250706205721006.png)
+
+- 开发中，我们经常检测页面滚动的距离，比如页面滚动100像素，就可以显示一个元素，或者固定一个元素
+
+```JS
+window.addEventListener('scroll', function () {
+    // document.documentElement 是html元素获取方式
+    const n = document.documentElement.scrollTop;
+    console.log(n);
+});
+```
+
+> 注意：document.documentElement   HTML 文档返回对象为HTML元素
+
+#### 滚动到指定的坐标
+
+`scrollTo()` 方法可把内容滚动到指定的坐标
+
+**语法：**`元素.scrollTo(x, y)`
+
+```JS
+// 让页面滚动到 y 轴 1000 像素的位置
+window.scrollTo(0, 1000);
+```
+
+### 页面尺寸事件
+
+会在窗口尺寸改变的时候触发事件：
+
+~~~javascript
+window.addEventListener('resize', function() {
+    // xxxxx
+})
+~~~
 
 
 
