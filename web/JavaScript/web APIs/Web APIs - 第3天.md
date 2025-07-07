@@ -371,7 +371,7 @@ window.addEventListener('scroll', function() {
 
 - 获取元素内容往左、往上滚出去看不到的距离
 
-- 这两个值是可读写的
+- 这两个值是可**读写**的
 
 2. 尽量在scroll事件里面获取被卷去的距离
 
@@ -387,9 +387,12 @@ div.addEventListener('scroll', function () {
 
 ```JS
 window.addEventListener('scroll', function () {
-    // document.documentElement 是html元素获取方式
-    const n = document.documentElement.scrollTop;
-    console.log(n);
+  // document.documentElement 是html元素获取方式
+  const n = document.documentElement.scrollTop;
+  console.log(n);
+  if (n >= 800) {
+    document.documentElement.scrollTop = 0
+  }
 });
 ```
 
@@ -410,21 +413,193 @@ window.scrollTo(0, 1000);
 
 会在窗口尺寸改变的时候触发事件：
 
+事件名: **resize**
+
 ~~~javascript
 window.addEventListener('resize', function() {
     // xxxxx
 })
 ~~~
 
+检测屏幕宽度：
 
+```JS
+window.addEventListener('resize', function () {
+    let w = document.documentElement.clientWidth;
+    console.log(w);
+});
+```
 
+获取元素宽高：
 
+- **获取宽高：**
 
+获取元素的可见部分宽高（不包含边框，margin，滚动条等）
 
+`clientWidth`和`clientHeight`
 
+![image-20250707201957370](assets/image-20250707201957370.png)
 
+- **Rem基准值**
 
+需求：分析 flexible.js 源码
 
+```JS
+// 声明一个计算字号的函数
+const setFontSize = function () {
+    // 获取 html 元素
+    const html = document.documentElement;
+    // 获取 html 元素的宽度
+    const clientWidth = html.clientWidth;
+    // html 根字号设置：当前页面宽度（html 元素） / 10 划分为10等份
+    html.style.fontSize = clientWidth / 10 + 'px';
+}
+
+// 页面加载先调用执行一次
+setFontSize();
+
+// 如果页面尺寸发生变化，则重新执行函数，重新计算
+window.addEventListener('resize', setFontSize);
+```
+
+----
+
+## 元素尺寸与位置
+
+- **使用场景：**
+
+前面案例滚动多少距离，都是我们自己算的，最好是页面滚动到某个元素，就可以做某些事
+
+简单说，就是通过js的方式，得到**元素在页面中的位置**
+
+这样我们可以做，页面滚动到这个位置，就可以做某些操作，省去计算了
+
+- **获取宽高：**
+
+获取元素的自身宽高、包含元素自身设置的宽高、padding、border
+
+`offsetWidth`和`offsetHeight  `
+
+获取出来的是数值,方便计算
+
+注意: 获取的是**可视宽高**, 如果盒子是隐藏的,获取的结果是0
+
+- **获取位置：**
+
+获取元素距离自己定位父级元素的左、上距离，如果都没有则以 文档左上角 为准
+
+**`offsetLeft`和`offsetTop  `注意是只读属性**
+
+- **示例：**仿京东固定导航栏案例
+
+需求：当页面滚动到秒杀模块，导航栏自动滑入，否则滑出
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .content {
+            overflow: hidden;
+            width: 1000px;
+            height: 3000px;
+            background-color: pink;
+            margin: 0 auto;
+        }
+
+        .backtop {
+            display: none;
+            width: 50px;
+            left: 50%;
+            margin: 0 0 0 505px;
+            position: fixed;
+            bottom: 60px;
+            z-index: 100;
+        }
+
+        .backtop a {
+            height: 50px;
+            width: 50px;
+            background: url(./images/bg2.png) 0 -600px no-repeat;
+            opacity: 0.35;
+            overflow: hidden;
+            display: block;
+            text-indent: -999em;
+            cursor: pointer;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background-color: purple;
+            text-align: center;
+            color: #fff;
+            line-height: 80px;
+            font-size: 30px;
+            transition: all .3s;
+        }
+
+        .sk {
+            width: 300px;
+            height: 300px;
+            background-color: skyblue;
+            margin-top: 500px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">我是顶部导航栏</div>
+    <div class="content">
+        <div class="sk">秒杀模块</div>
+    </div>
+    <div class="backtop">
+        <img src="./images/close2.png" alt="">
+        <a href="javascript:;"></a>
+    </div>
+    <script>
+        const sk = document.querySelector('.content .sk')
+        const backtop = document.querySelector('.backtop')
+        const header = document.querySelector('.header')
+        window.addEventListener('scroll', function () {
+            const n = document.documentElement.scrollTop
+            if (n >= (sk.offsetTop - header.offsetHeight)) {
+                backtop.style.display = 'block'
+            } else {
+                backtop.style.display = 'none'
+            }
+        })
+
+        // 返回顶部
+        const backtopImg = document.querySelector('.backtop img')
+        backtopImg.addEventListener('click', function () {
+            backtop.style.display = 'none'
+        })
+
+        const backtopA = document.querySelector('.backtop a')
+        backtopA.addEventListener('click', function () {
+            document.documentElement.scrollTop = 0
+        })
+
+    </script>
+</body>
+
+</html>
+```
 
 
 

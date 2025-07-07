@@ -326,13 +326,13 @@ fn()
 
 ~~~javascript
 // 1. 第一种写法
-(function(){ xxx  })();
+(function(a, b){ xxx  })(a, b);
 
 // 2. 第二种写法
-(function(){xxxx}());
+(function(a, b){xxxx}(a, b));
 ~~~
 
-后面那个`()`相当于调用函数
+后面那个`()`相当于调用函数，可以 在里面出传入参数
 
 >无需调用，立即执行，其实本质已经调用了
 >
