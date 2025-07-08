@@ -490,6 +490,12 @@ window.addEventListener('resize', setFontSize);
 
 **`offsetLeft`和`offsetTop  `注意是只读属性**
 
+- **获取位置：**
+
+` element.getBoundingClientRect()`
+
+方法返回元素的大小及其相对于视口的位置
+
 - **示例：**仿京东固定导航栏案例
 
 需求：当页面滚动到秒杀模块，导航栏自动滑入，否则滑出
@@ -541,7 +547,7 @@ window.addEventListener('resize', setFontSize);
 
         .header {
             position: fixed;
-            top: 0;
+            top: -80px;
             left: 0;
             width: 100%;
             height: 80px;
@@ -577,10 +583,12 @@ window.addEventListener('resize', setFontSize);
         const header = document.querySelector('.header')
         window.addEventListener('scroll', function () {
             const n = document.documentElement.scrollTop
-            if (n >= (sk.offsetTop - header.offsetHeight)) {
+            if (n >= (sk.offsetTop)) {
                 backtop.style.display = 'block'
+                header.style.top = 0
             } else {
                 backtop.style.display = 'none'
+                header.style.top = '-80px'
             }
         })
 
@@ -601,7 +609,17 @@ window.addEventListener('resize', setFontSize);
 </html>
 ```
 
+---
 
+## 总结
+
+| 属性                              | 作用                                     | 说明                                                         |
+| --------------------------------- | ---------------------------------------- | ------------------------------------------------------------ |
+| `scrollLeft`和`scrollTop`         | 被卷去的头部和左侧                       | 配合页面滚动来用，**可读写**                                 |
+| `clientWidth` 和 `clientHeight`   | 获得元素宽度和高度                       | 不包含border, margin，滚动条 用于js获取元素大小，**只读**属性 |
+| `offsetWidth`和`offsetHeight`     | 获得元素宽度和高度                       | **包含border、padding，滚动条等，只读**                      |
+| **`offsetLeft`和`offsetTop`**     | 获取元素距离自己定位父级元素的左、上距离 | 获取元素位置的时候使用，只读属性                             |
+| `element.getBoundingClientRect()` | 方法返回元素的大小及其相对于视口的位置   |                                                              |
 
 
 
