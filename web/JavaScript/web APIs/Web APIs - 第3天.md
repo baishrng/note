@@ -621,5 +621,182 @@ window.addEventListener('resize', setFontSize);
 | **`offsetLeft`和`offsetTop`**     | 获取元素距离自己定位父级元素的左、上距离 | 获取元素位置的时候使用，只读属性                             |
 | `element.getBoundingClientRect()` | 方法返回元素的大小及其相对于视口的位置   |                                                              |
 
+----
+
+## 综合案例-电梯导航
+
+需求：点击不同的模块，页面可以自动跳转不同的位置
+
+①：页面滚动到对应位置，导航显示，否则隐藏模块
+
+②：点击导航对应小模块，页面 会跳到对应大模块位置
+
+③：页面滚动到对应位置，电梯导航对应模块自动发生变化
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            height: 3000px;
+        }
+
+        .aside {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: all 1s;
+        }
+
+        .item {
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            padding: 0 10px;
+            cursor: pointer;
+        }
+
+        .active {
+            background-color: red;
+            color: #fff;
+        }
+
+        .content {
+            width: 660px;
+            margin: 400px auto;
+        }
+
+        .neirong {
+            height: 300px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .content1 {
+            background-color: red;
+        }
+
+        .content2 {
+            background-color: blue;
+        }
+
+        .content3 {
+            background-color: orange;
+        }
+
+        .content4 {
+            background-color: yellowgreen;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="aside">
+        <div class="item" data-id="1">男装/女装</div>
+        <div class="item" data-id="2">儿童服装/游乐园</div>
+        <div class="item" data-id="3">电子产品</div>
+        <div class="item" data-id="4">电影/美食</div>
+    </div>
+
+    <div class="content">
+        <div class="neirong content1">男装/女装</div>
+        <div class="neirong content2">儿童服装/游乐园</div>
+        <div class="neirong content3">电子产品</div>
+        <div class="neirong content4">电影/美食</div>
+    </div>
+
+    <script>
+        // 页面滚动到对应位置，导航显示，否则隐藏模块
+        // 立即执行函数，避免变量污染
+        (function () {
+            const aside = document.querySelector('.aside')
+            const content1 = document.querySelector('.content .content1')
+            window.addEventListener('scroll', function () {
+                const n = document.documentElement.scrollTop
+                if (n >= content1.offsetTop) {
+                    aside.style.opacity = 1
+                } else {
+                    aside.style.opacity = 0
+                }
+            })
+        }());
+
+        // 点击导航对应小模块，页面 会跳到对应大模块位置
+        (function () {
+            // 使用事件委托
+            const aside = document.querySelector('.aside')
+            aside.addEventListener('click', function (e) {
+                const ele = e.target
+                if (ele.tagName === 'DIV') {
+                    const content = document.querySelector(`.content .content${ele.dataset.id}`)
+                    document.documentElement.scrollTop = content.offsetTop
+
+                    const old = document.querySelector('.aside .active')
+                    if (old) old.classList.remove('active')
+                    ele.classList.add('active')
+                }
+            })
+        }());
+
+        // 页面滚动到对应位置，电梯导航对应模块自动发生变化
+        (function () {
+            function remove_active() {
+                const old = document.querySelector('.aside .active')
+                if (old) old.classList.remove('active')
+            }
+
+            const content1 = document.querySelector('.content .content1')
+            const content2 = document.querySelector('.content .content2')
+            const content3 = document.querySelector('.content .content3')
+            const content4 = document.querySelector('.content .content4')
+            window.addEventListener('scroll', function () {
+                const n = document.documentElement.scrollTop
+                if (n >= content1.offsetTop && n < content2.offsetTop) {
+                    remove_active()
+                    document.querySelector(`.aside div[data-id='1']`).classList.add('active')   // 属性选择器
+                } else if (n >= content2.offsetTop && n < content3.offsetTop) {
+                    remove_active()
+                    document.querySelector(`.aside div[data-id='2']`).classList.add('active')
+                } else if (n >= content3.offsetTop && n < content4.offsetTop) {
+                    remove_active()
+                    document.querySelector(`.aside div[data-id='3']`).classList.add('active')
+                } else if (n >= content4.offsetTop) {
+                    remove_active()
+                    document.querySelector(`.aside div[data-id='4']`).classList.add('active')
+                }
+            })
+        }());
+    </script>
+</body>
+
+</html>
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
