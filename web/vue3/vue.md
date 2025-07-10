@@ -533,8 +533,10 @@ function test(){
 >    <img src="../../../tools/env/web/vue3/images/自动补充value.png" alt="自动补充value" style="zoom:50%;border-radius:20px" /> 
 >
 > 2. `reactive`重新分配一个新对象，会**失去**响应式（可以使用`Object.assign`去整体替换）。
+>
+> 如：Object.assign(car, {brand:'小米', price:128})
 
-- 使用原则：
+- 使用原则：	
 
 > 1. 若需要一个基本类型的响应式数据，必须使用`ref`。
 > 2. 若需要一个响应式对象，层级不深，`ref`、`reactive`都可以。
@@ -585,7 +587,7 @@ function test(){
 
 ## 3.8. 【computed】
 
-作用：根据已有数据计算出新数据（和`Vue2`中的`computed`作用一致）。
+作用：根据已有数据计算出新数据（和`Vue2`中的`computed`作用一致）。(`computed`)有缓存
 
 <img src="../../../tools/env/web/vue3/images/computed.gif" style="zoom:20%;" />  
 
@@ -668,7 +670,7 @@ function test(){
   const stopWatch = watch(sum,(newValue,oldValue)=>{
     console.log('sum变化了',newValue,oldValue)
     if(newValue >= 10){
-      stopWatch()
+      stopWatch()		// 解除监视
     }
   })
 </script>
@@ -728,7 +730,7 @@ function test(){
 
 ### *  情况三
 
-监视`reactive`定义的【对象类型】数据，且默认开启了深度监视。
+监视`reactive`定义的【对象类型】数据，且默认开启了深度监视，且深度监视不被关闭。
 
 ```vue
 <template>
@@ -773,7 +775,7 @@ function test(){
     obj.a.b.c = 888
   }
 
-  // 监视，情况三：监视【reactive】定义的【对象类型】数据，且默认是开启深度监视的
+  // 监视，情况三：监视【reactive】定义的【对象类型】数据，且默认是开启深度监视的，且深度监视不被关闭
   watch(person,(newValue,oldValue)=>{
     console.log('person变化了',newValue,oldValue)
   })
@@ -790,7 +792,7 @@ function test(){
 1. 若该属性值**不是**【对象类型】，需要写成函数形式。
 2. 若该属性值是**依然**是【对象类型】，可直接编，也可写成函数，建议写成函数。
 
-结论：监视的要是对象里的属性，那么最好写函数式，注意点：若是对象监视的是地址值，需要关注对象内部，需要手动开启深度监视。
+结论：监视的要是对象里的属性，那么最好写函数式，注意点：若是对象监视的是地址值，需要关注对象内部，需要手动开启深度监视（deep:true）。
 
 ```vue
 <template>
