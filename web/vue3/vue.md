@@ -1632,12 +1632,32 @@ routes:[
 
 路由组件的两个重要的属性：`$route`和`$router`变成了两个`hooks`
 
+进行路由跳转
+
 ```js
 import {useRoute,useRouter} from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
 
+// 看3秒然后跳转到/news
+onMounted(()=>{
+  setTimeout(()=>{
+    router.push('/news')
+  }, 3000)
+})
+
+// 按钮绑定函数，点击按钮跳转路由
+function showNewsDetail(item:NewsInterface) {
+  router.push({
+    // path:'news/detail'
+    name: 'xiangqing',
+    params: {
+      id: item.id,
+      title: item.title,
+      content: item.content
+    }})
+}
 console.log(route.query)
 console.log(route.parmas)
 console.log(router.push)
