@@ -2042,17 +2042,52 @@ export const useTalkStore = defineStore('talk',()=>{
 
 3. 示例：
 
-   ```html
-   <!--在父组件中，给子组件绑定自定义事件：-->
-   <Child @send-toy="toy = $event"/>
+   Father.vue
    
-   <!--注意区分原生事件与自定义事件中的$event-->
-   <button @click="toy = $event">测试</button>
+   ```html
+   <template>
+     <div class="father">
+       <h3>父组件</h3>
+   		<h4 v-show="toy">子给的玩具：{{ toy }}</h4>
+		<!-- 给子组件Child绑定事件 -->
+       <Child @send-toy="saveToy"/>
+     </div>
+   </template>
+   
+   <script setup lang="ts" name="Father">
+     import Child from './Child.vue'
+   	import { ref } from "vue"; 
+   	// 数据
+   	let toy = ref('')
+   	// 用于保存传递过来的玩具
+   	function saveToy(value:string){
+   		console.log('saveToy',value)
+   		toy.value = value
+   	}
+   </script>
    ```
-
+   
+   Child.vue
+   
    ```js
-   //子组件中，触发事件：
-   this.$emit('send-toy', 具体数据)
+   <template>
+     <div class="child">
+       <h3>子组件</h3>
+   		<h4>玩具：{{ toy }}</h4>
+   		<button @click="emit('send-toy',toy)">测试</button>
+     </div>
+   </template>
+   
+   <script setup lang="ts" name="Child">
+   	import { ref } from "vue";
+   	// 数据
+   	let toy = ref('奥特曼')
+   	// 声明事件
+   	const emit =  defineEmits(['send-toy'])
+   
+   	const btn = document.querySelector('button') as HTMLElement
+   	btn.click()
+   </script>
    ```
 
 ## 6.3. 【mitt】
